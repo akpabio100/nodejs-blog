@@ -13,21 +13,25 @@ const session = require('express-session');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+
+// Trust proxy for Render / production
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
+
 // connect to DB
 connectDB();
 
+
+// Core middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(methodOverride('_method'));
 
-app.use((req, res, next) => {
-  res.locals.currentRoute = req.path;
-  next();
-});
 
-
-
+// Sessions (MUST be before routes)
 app.use(session({
   secret: process.env.SESSION_SECRET || 'keyboard cat',
   resave: false,
@@ -39,14 +43,25 @@ app.use(session({
   // cookie:{maxAge: new Date (Date.now() + (3600000))}
 }));
 
+
+// Make current route available to views
+app.use((req, res, next) => {
+  res.locals.currentRoute = req.path;
+  next();
+});
+
+
+// Static files
 app.use(express.static('public'));
 
-// Templating Engine
+
+// View engine
 app.use(expressLayout);
 app.set('layout', './layouts/main');
 app.set('view engine', 'ejs');
 
 app.locals.isActiveRoute = isActiveRoute;
+
 
 // ROUTES
 app.use('/', require('./server/routes/main'));

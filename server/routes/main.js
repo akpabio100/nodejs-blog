@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const nodemailer = require('nodemailer');
 const Post = require('../models/post');
 
 /** 
@@ -60,7 +61,7 @@ router.get('/post/:id', async (req, res) => {
         const locals = {
         title: data.title,
         description: "Simple Blog created with NodeJs, Express & MongoDb.",
-        currentRoute: `/post/${slung}`
+        currentRoute: `/post/${slug}`
     }
 
         res.render('post', {locals, data});
@@ -72,7 +73,7 @@ router.get('/post/:id', async (req, res) => {
 });
 
 
-
+// GET /About — display about page
 
 router.get('/about', (req, res) => {
     res.render('about', {
@@ -80,12 +81,49 @@ router.get('/about', (req, res) => {
     });
 });
 
+
+// GET /contact — display contact page
+
 router.get('/contact', (req, res) => {
-    res.render ('contact');
+  res.render('contact', { message: null }); // ✅ pass message
 });
 
 
-module.exports = router;
+
+// POST /contact — send form to your email
+
+router.post('/contact', async (req, res) => {
+  const { name, email, subject, message } = req.body;
+
+  try {
+    // 1️⃣ Create transporter (Gmail example)
+    let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER, // your Gmail address
+        pass: process.env.EMAIL_PASS  // Gmail App Password
+      }
+    });
+
+    // 2️⃣ Prepare email
+    let mailOptions = {
+      from: `"${name}" <${email}>`,  // sender info
+      to: 'adekunlefrancis2003@gmail.com', // your email
+      subject: subject || 'New Contact Message',
+      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
+    };
+
+    // 3️⃣ Send email
+    await transporter.sendMail(mailOptions);
+
+    // 4️⃣ Render contact page with success message
+    res.render('contact', { message: 'Thank you! Your message has been sent successfully.' });
+
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.render('contact', { message: 'Oops! Something went wrong. Please try again later.' });
+  }
+});
 
 
 /** 
@@ -102,7 +140,7 @@ router.post('/search', async (req, res) => {
 
     let searchTerm = req.body.searchTerm || "";
 
-    const searchNoSpecialChar = searchTerm.replace(/[^a-zA-Z0-9]/g, "");
+    const searchNoSpecialChar = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
     const data = await Post.find({
       $or: [
@@ -123,6 +161,7 @@ router.post('/search', async (req, res) => {
 });
 
 
+module.exports = router;
 
 // function insertPostData(params) {
 //     post.insertMany([

@@ -1,1 +1,63 @@
-<h1>contact</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Me | Node.js Blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <!-- Main Contact Section -->
+    <section class="page">
+        <div class="page-container">
+
+            <h1 class="page-title">Contact</h1>
+
+            <p class="page-text contact-intro">
+                If you have questions, collaboration ideas, or project opportunities, feel free to reach out using the form below.
+            </p>
+
+            <!-- Success/Error Message -->
+            <% if (typeof message !== 'undefined' && message) { %>
+                <p class="contact-message"><%= message %></p>
+            <% } %>
+
+            <!-- Contact Form -->
+            <form action="/contact" method="POST" class="contact-form">
+
+                <div class="contact-row">
+                    <div class="contact-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" placeholder="Your full name" required>
+                    </div>
+
+                    <div class="contact-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Your email address" required>
+                    </div>
+                </div>
+
+                <div class="contact-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" placeholder="Subject of your message">
+                </div>
+
+                <div class="contact-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" placeholder="Write your message here..." required></textarea>
+                </div>
+
+                <button type="submit" class="contact-btn">Send Message</button>
+            </form>
+
+            <p class="alt-contact">
+                Or email me directly at 
+                <a href="mailto:adekunlefrancis2003@gmail.com">adekunlefrancis2003@gmail.com</a>
+            </p>
+
+        </div>
+    </section>
+
+</body>
+</html>
