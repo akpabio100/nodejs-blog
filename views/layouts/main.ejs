@@ -3,8 +3,8 @@
  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%- locals.title %></title>
-    <meta name="description" content="<%= locals.description %>">
+    <title><%= (typeof locals !== 'undefined' && locals.title) ? locals.title : 'NodeJs Blog' %></title>
+    <meta name="description" content="<%= (typeof locals !== 'undefined' && locals.description) ? locals.description : 'NodeJs blog application' %>">
     <link rel="stylesheet" href="/css/style.css">
     <script type="text/javascript" defer src="/js/script.js"></script>
  </head>

@@ -1,0 +1,19 @@
+<section class="page">
+  <div class="page-container">
+    <h2>Edit Post</h2>
+
+    <% if (error) { %>
+      <div class="alert alert-error"><%= error %></div>
+    <% } %>
+
+    <form action="/post/edit/<%= post._id %>" method="POST" class="form-post">
+      <label for="title">Title</label>
+      <input type="text" name="title" id="title" value="<%= post.title %>" required>
+
+      <label for="body">Comment</label>
+      <textarea name="body" id="body" rows="10" required><%= post.body %></textarea>
+
+      <button type="submit" class="btn">Update Post</button>
+    </form>
+  </div>
+</section>

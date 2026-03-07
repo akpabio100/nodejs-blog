@@ -1,0 +1,51 @@
+<div class="page-container">
+  <h3>Register</h3>
+
+  <% if (error) { %>
+    <div class="alert"><%= error %></div>
+  <% } %>
+
+  <form action="/admin/register" method="POST" enctype="multipart/form-data">
+
+    <label for="username"><b>Username</b></label>
+    <input id="username" type="text" placeholder="Enter Username" name="username" autocomplete="username" required>
+
+    <label for="email"><b>Email</b></label>
+    <input id="email" type="email" placeholder="Enter Email" name="email" required>
+
+    <label for="phone"><b>Phone</b></label>
+    <input id="phone" type="tel" placeholder="Enter Phone" name="phone" required>
+
+    <label for="address"><b>Address</b></label>
+    <input id="address" type="text" placeholder="Enter Address" name="address" required>
+
+    <% /* searchable country selector */ %>
+    <%- include('../partials/countryselect') %>
+
+    <label for="profile"><b>Profile picture</b></label>
+    <input id="profile" type="file" name="profile" accept="image/*">
+
+    <label for="password"><b>Password</b></label>
+    <div class="input-wrapper">
+      <input id="password" type="password" placeholder="Enter Password" name="password" autocomplete="new-password" required>
+      <button type="button" class="toggle-password" aria-label="Show password">&#128065;</button>
+    </div>
+    <small>Password must be at least 8 characters and include uppercase, lowercase, number and symbol</small>
+
+    <label for="confirm"><b>Confirm Password</b></label>
+    <div class="input-wrapper">
+      <input id="confirm" type="password" placeholder="Re-enter Password" name="confirm" autocomplete="new-password" required>
+      <button type="button" class="toggle-password" aria-label="Show password">&#128065;</button>
+    </div>
+
+    <label for="secret"><b>Admin code</b></label>
+    <div class="input-wrapper">
+      <input id="secret" type="password" placeholder="Enter admin secret" name="secret" required>
+      <button type="button" class="toggle-password" aria-label="Show password">&#128065;</button>
+    </div>
+    <small>Ask the site owner for this code; it comes from the ADMIN_SECRET environment variable.</small>
+
+    <input type="submit" value="Register" class="btn">
+
+  </form>
+</div>

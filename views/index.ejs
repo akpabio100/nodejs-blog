@@ -1,3 +1,7 @@
+<% if (showWelcome && user) { %>
+  <div id="welcome-msg" class="welcome-msg">Welcome back, <%= user.username %>!</div>
+<% } %>
+
 <div class="author">
     <h1 class="author_heading">Hi, I am Akpabio.</h1>
     <p class="author_body">Web developer and content creator.</p>
@@ -6,18 +10,29 @@
 <img src="/img/jack.jpg" alt="person looking out through window" class="hero-image" width="981" height="528">
 
 <section class="articles">
+    <div class="post-cta">
+        <a href="/post/add" class="btn btn-small">Add Post</a>
+        <p>Before publishing, write a clear title and a comment.</p>
+    </div>
     <h2 class="article_heading">Latest Posts</h2>
     <ul class="article-ul">
        
         <% data.forEach(post => { %>
-         
-        
-
             <li>
                 <a href="/post/<%= post._id %>">
                     <span><%= post.title %></span>
                     <span class="article-list_date"><%=  post.createdAt.toDateString() %></span>
                 </a>
+                <%
+                  const likedOnList = post.likes && userId && post.likes.some(id => id.toString() === userId.toString());
+                %>
+                <div class="post-hover-actions">
+                  <form action="/post/<%= post._id %>/like?redirect=/" method="POST">
+                    <button type="submit" class="icon-btn" title="Like"><%= likedOnList ? '👍' : '👍' %> <%= post.likes ? post.likes.length : 0 %></button>
+                  </form>
+                  <a href="/post/<%= post._id %>#comment-section" class="icon-btn" title="Comment">💬 <%= post.comments ? post.comments.length : 0 %></a>
+                  <button type="button" class="icon-btn js-share-post" data-share-url="/post/<%= post._id %>" title="Share">↗</button>
+                </div>
             </li>
 
         <% }) %>
