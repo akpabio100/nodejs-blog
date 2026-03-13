@@ -1,0 +1,83 @@
+<div class="page-container profile-container">
+  <h2>Your Profile</h2>
+
+  <% if (error) { %>
+    <div class="alert"><%= error %></div>
+  <% } %>
+  <% if (message) { %>
+    <div class="alert" style="background:#e2f7e2;color:#007a00;"><%= message %></div>
+  <% } %>
+
+  <div class="profile-top">
+    <div class="profile-avatar-wrap">
+      <button type="button" id="profileAvatarBtn" class="profile-avatar-button" aria-label="Profile image options">
+        <% if (user.profilePic) { %>
+          <img src="/uploads/<%= user.profilePic %>" alt="Profile picture" class="profile-avatar" id="profileAvatarImg">
+        <% } else { %>
+          <div class="profile-avatar profile-avatar-placeholder" id="profileAvatarImg">No Photo</div>
+        <% } %>
+      </button>
+
+      <div id="profileImageMenu" class="profile-image-menu hidden">
+        <button type="button" id="viewProfileImageBtn">View image</button>
+        <button type="button" id="changeProfileImageBtn">Change image</button>
+      </div>
+
+      <form id="profileImageForm" action="/profile/image" method="POST" enctype="multipart/form-data" style="display:none;">
+        <input id="profileImageInput" type="file" name="profile" accept="image/*">
+      </form>
+    </div>
+
+    <div class="profile-meta">
+      <p><strong>Username:</strong> <%= user.username %></p>
+      <p><strong>Last Login:</strong> <%= user.lastLogin ? user.lastLogin.toLocaleString() : 'never' %></p>
+    </div>
+  </div>
+
+  <div class="profile-form">
+    <p><strong>Username:</strong> <%= user.username %></p>
+    <p><strong>Email:</strong> <%= user.email || 'not set' %></p>
+    <p><strong>Phone:</strong> <%= user.phone || 'not set' %></p>
+    <p><strong>Address:</strong> <%= user.address || 'not set' %></p>
+    <p><strong>Country:</strong> <%= user.country || 'not set' %></p>
+  </div>
+
+  <hr>
+
+  <div class="profile-posts-head">
+    <h3>Your Posts</h3>
+    <a href="/post/add" class="btn btn-small">Add Post</a>
+  </div>
+
+  <% if (!posts || posts.length === 0) { %>
+    <p>You have not created any post yet.</p>
+  <% } else { %>
+    <ul class="article-ul">
+      <% posts.forEach(post => { %>
+        <li>
+          <a href="/post/<%= post._id %>">
+            <span><%= post.title %></span>
+            <span class="article-list_date"><%= post.createdAt.toDateString() %></span>
+          </a>
+          <div class="profile-post-actions">
+            <a href="/post/edit/<%= post._id %>" class="btn btn-small">Edit</a>
+            <form action="/post/delete/<%= post._id %>" method="POST">
+              <button type="submit" class="btn btn-delete btn-small">Delete</button>
+            </form>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <div id="profileImageModal" class="profile-image-modal hidden">
+    <div class="profile-image-modal-content">
+      <button type="button" id="closeProfileImageModal" class="btn btn-small">Close</button>
+      <% if (user.profilePic) { %>
+        <img src="/uploads/<%= user.profilePic %>" alt="Profile full view" class="profile-image-full">
+      <% } else { %>
+        <p>No profile image uploaded yet.</p>
+      <% } %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="page-container">
+  <h3>Two-Factor Verification</h3>
+
+  <% if (error) { %>
+    <div class="alert"><%= error %></div>
+  <% } %>
+
+  <form action="/2fa" method="POST">
+    <label for="code"><b>Code</b></label>
+    <input id="code" type="text" name="code" placeholder="6-digit code" required>
+    <input type="submit" value="Verify" class="btn">
+  </form>
+</div>

@@ -1,0 +1,18 @@
+<div class="page-container">
+  <h3>Forgot Password</h3>
+
+  <% if (error) { %>
+    <div class="alert"><%= error %></div>
+  <% } %>
+
+  <form action="/forgot" method="POST">
+    <label for="email"><b>Email (optional)</b></label>
+    <input id="email" type="email" name="email" placeholder="Enter your email">
+
+    <label for="phone"><b>Phone number (optional)</b></label>
+    <input id="phone" type="tel" name="phone" placeholder="Enter your phone number">
+
+    <small>Provide either your email or phone number.</small>
+    <input type="submit" value="Send Reset Link" class="btn">
+  </form>
+</div>

@@ -1,4 +1,78 @@
 <h1><%= data.title %></h1>
+
 <article class="article">
     <%= data.body %>
 </article>
+
+<section class="post-interactions">
+  <div class="post-action-row">
+    <form action="/post/<%= data._id %>/like" method="POST">
+      <button type="submit" class="icon-btn" title="Like"><%= likedByUser ? '👍' : '👍' %> <%= data.likes ? data.likes.length : 0 %></button>
+    </form>
+    <a href="#comment-section" class="icon-btn" title="Comment">💬 <%= data.comments ? data.comments.length : 0 %></a>
+    <button type="button" class="icon-btn js-share-post" data-share-url="/post/<%= data._id %>" title="Share">↗</button>
+  </div>
+
+  <div class="post-comments">
+    <h3>Comments (<%= data.comments ? data.comments.length : 0 %>)</h3>
+    <form id="comment-section" action="/post/<%= data._id %>/comment" method="POST" class="comment-form">
+      <label for="commentText">Add a comment</label>
+      <textarea id="commentText" name="comment" rows="3" placeholder="Write your comment..." required></textarea>
+      <button type="submit" class="btn btn-small">Comment</button>
+    </form>
+
+    <% if (data.comments && data.comments.length > 0) { %>
+      <ul class="comment-list">
+        <% data.comments.slice().reverse().forEach(c => { %>
+          <li>
+            <p><strong><%= c.author && c.author.username ? c.author.username : 'User' %></strong></p>
+            <p><%= c.text %></p>
+            <small><%= c.createdAt ? new Date(c.createdAt).toLocaleString() : '' %></small>
+
+            <div class="comment-actions">
+              <form action="/post/<%= data._id %>/comment/<%= c._id %>/react" method="POST">
+                <input type="hidden" name="reaction" value="like">
+                <button type="submit" class="icon-btn">👍 <%= c.likes ? c.likes.length : 0 %></button>
+              </form>
+              <form action="/post/<%= data._id %>/comment/<%= c._id %>/react" method="POST">
+                <input type="hidden" name="reaction" value="love">
+                <button type="submit" class="icon-btn">❤️ <%= c.loves ? c.loves.length : 0 %></button>
+              </form>
+            </div>
+
+            <form action="/post/<%= data._id %>/comment/<%= c._id %>/reply" method="POST" class="reply-form">
+              <input type="text" name="reply" placeholder="Reply to this comment..." required>
+              <button type="submit" class="btn btn-small">Reply</button>
+            </form>
+
+            <% if (c.replies && c.replies.length > 0) { %>
+              <ul class="reply-list">
+                <% c.replies.forEach(r => { %>
+                  <li>
+                    <p><strong><%= r.author && r.author.username ? r.author.username : 'User' %></strong> <%= r.text %></p>
+                    <small><%= r.createdAt ? new Date(r.createdAt).toLocaleString() : '' %></small>
+                  </li>
+                <% }) %>
+              </ul>
+            <% } %>
+          </li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <p>No comments yet.</p>
+    <% } %>
+  </div>
+</section>
+
+<%
+  const authorId = data.author ? (data.author._id || data.author) : null;
+  const isOwner = userId && authorId && authorId.toString() === userId.toString();
+%>
+<% if (isOwner) { %>
+  <div class="owner-post-actions">
+    <a href="/post/edit/<%= data._id %>" class="btn btn-small owner-post-btn">Edit Post</a>
+    <form action="/post/delete/<%= data._id %>" method="POST">
+      <button type="submit" class="btn btn-delete btn-small owner-post-btn">Delete Post</button>
+    </form>
+  </div>
+<% } %>

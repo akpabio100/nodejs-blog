@@ -1,0 +1,27 @@
+
+<div class="page-container">
+  <h3>Sign In</h3>
+
+  <% if (error) { %>
+    <div class="alert"><%= error %></div>
+  <% } else if (locals.query && locals.query.registered) { %>
+    <div class="alert" style="background:#e2f7e2;color:#007a00;">Account created successfully, please log in.</div>
+  <% } %>
+
+  <form action="/login" method="POST">
+
+    <label for="username"><b>Username</b></label>
+    <input id="username" type="text" placeholder="Enter Username" name="username" value="<%= typeof username !== 'undefined' ? username : '' %>" autocomplete="username" required>
+
+    <label for="password"><b>Password</b></label>
+    <div class="input-wrapper">
+      <input id="password" type="password" placeholder="Enter Password" name="password" autocomplete="current-password" required>
+      <button type="button" class="toggle-password" aria-label="Show password">&#128065;</button>
+    </div>
+
+    <input type="submit" value="Login" class="btn">
+
+    <p><a href="/forgot">Forgot password?</a></p>
+    <p>Don't have an account? <a href="/register">Register here</a></p>
+  </form>
+</div>

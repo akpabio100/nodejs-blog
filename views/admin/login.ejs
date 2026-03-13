@@ -1,0 +1,25 @@
+<div class="page-container">
+  <h3>Sign In</h3>
+
+  <% if (error) { %>
+    <div class="alert"><%= error %></div>
+  <% } %>
+
+  <form action="/admin/login" method="POST">
+
+    <label for="username"><b>Username</b></label>
+    <input id="username" type="text" placeholder="Enter Username" name="username" value="<%= typeof username !== 'undefined' ? username : '' %>" autocomplete="username" required>
+
+    <label for="password"><b>Password</b></label>
+    <div class="input-wrapper">
+      <input id="password" type="password" placeholder="Enter Password" name="password" autocomplete="current-password" required>
+      <button type="button" class="toggle-password" aria-label="Show password">&#128065;</button>
+    </div>
+    <label for="code"><b>Admin Code</b></label>
+    <input id="code" type="text" placeholder="Enter code from owner" name="code">
+    <small>If you have just applied for admin access, enter the code you received by email.</small>
+    <input type="submit" value="Login" class="btn">
+    <p><a href="/forgot">Forgot password?</a></p>
+
+  </form>
+</div>

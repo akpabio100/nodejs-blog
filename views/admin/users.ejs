@@ -1,0 +1,28 @@
+<div class="admin-users">
+<h2>Manage Users</h2>
+<table>
+  <thead>
+    <tr><th>Username</th><th>Email</th><th>Last Login</th><th>Flagged</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+    <% users.forEach(u => { %>
+      <tr>
+        <td><%= u.username %></td>
+        <td><%= u.email || '-' %></td>
+        <td><%= u.lastLogin ? u.lastLogin.toLocaleString() : '-' %></td>
+        <td><%= u.isFlagged ? 'Yes' : 'No' %></td>
+        <td>
+          <% if (u.role === 'admin' && canDemoteAdmins && currentAdminId.toString() !== u._id.toString()) { %>
+            <form method="POST" action="/admin/users/<%= u._id %>/demote" style="display:inline">
+              <button type="submit">Demote</button>
+            </form>
+          <% } %>
+          <form method="POST" action="/admin/users/<%= u._id %>/flag" style="display:inline">
+            <button type="submit"><%= u.isFlagged ? 'Unflag' : 'Flag' %></button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+</div>
